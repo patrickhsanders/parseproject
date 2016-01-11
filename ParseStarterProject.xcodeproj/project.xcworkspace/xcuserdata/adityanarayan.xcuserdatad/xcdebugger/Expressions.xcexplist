@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "__32-[ParseAccess getLikesForImage:]_block_invoke:ParseAccess.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[ParseAccess getLikesForImage:]:ParseAccess.m">
+      </ContextState>
+      <ContextState
+         contextName = "__30-[ParseAccess getImageObject:]_block_invoke_2:ParseAccess.m">
+      </ContextState>
+      <ContextState
+         contextName = "__30-[ParseAccess getUserDetails:]_block_invoke:ParseAccess.m">
+      </ContextState>
+      <ContextState
+         contextName = "__36-[ParseAccess getLikeCountForImage:]_block_invoke:ParseAccess.m">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
