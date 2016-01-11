@@ -85,6 +85,7 @@
 		AADD8B891C44045200FD6B6A /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		AADD8B8A1C44045200FD6B6A /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		AADD8B911C445ADF00FD6B6A /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = ParseStarterProject/Media.xcassets; sourceTree = "<group>"; };
+		AADD8B931C44627900FD6B6A /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,6 +221,7 @@
 				AA8D12261C400F1D009783E7 /* DataAccess.m */,
 				AA8D12281C400F2B009783E7 /* ParseAccess.h */,
 				AA8D12291C400F2B009783E7 /* ParseAccess.m */,
+				AADD8B931C44627900FD6B6A /* readme.md */,
 			);
 			name = "Data Access";
 			sourceTree = "<group>";
