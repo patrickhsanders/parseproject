@@ -1,4 +1,4 @@
-**goals for the evening
+##goals for the evening
 - refactor DOA to use NSNotification to perform actual actions on DAO data instead of updating everything
 - refactor ParseAccess to save PFObjects and not datamodels
 - tags for images
