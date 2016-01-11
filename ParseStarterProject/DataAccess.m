@@ -14,17 +14,37 @@
   self = [super init];
   
   _parse = [[ParseAccess alloc] init];
-  [_parse addObserver:self forKeyPath:@"images" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
-  [_parse getImagesWithLimit:1];
+  UIImage *image = [UIImage imageNamed:@"default.png"];
+  //[_parse signup:@"django" withPassword:@"django" withAvatar:image withFullName:@"Django"];
+  [_parse login:@"patrick" withPassword:@"patrick"];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(loggedInNotification:)
+                                               name:@"LoginSuccess"
+                                             object:nil];
   
-  
-  
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(logoutNotification:)
+                                               name:@"LogoutSuccess"
+                                             object:nil];
   return self;
 }
 
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-  
-  NSLog(@"change in KVO");
+- (void)loggedInNotification:(NSNotification*)notification{
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(receiveTestNotification:)
+                                               name:@"UpdateDataParse"
+                                             object:nil];
+  [_parse getImagesWithLimit:10];
+}
+
+- (void)logoutNotification:(NSNotification*)notification{
+  _images = nil;
+  NSLog(@"Logout");
+}
+
+- (void)receiveTestNotification:(NSNotification*)notification{
+  NSLog(@"NSNotify: %@ updated",[notification.userInfo valueForKey:@"update"]);
+  _images = [_parse getLocalImages];
 }
 
 @end

@@ -36,6 +36,7 @@
 		AADD8B841C43FFB200FD6B6A /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = AADD8B831C43FFB200FD6B6A /* Comment.m */; };
 		AADD8B871C44038500FD6B6A /* Like.m in Sources */ = {isa = PBXBuildFile; fileRef = AADD8B861C44038500FD6B6A /* Like.m */; };
 		AADD8B8B1C44045200FD6B6A /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = AADD8B8A1C44045200FD6B6A /* User.m */; };
+		AADD8B921C445ADF00FD6B6A /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AADD8B911C445ADF00FD6B6A /* Media.xcassets */; };
 		DD952FCB16E7F5CF00470144 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97E18B1E1624CB5700B17A67 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
@@ -83,6 +84,7 @@
 		AADD8B861C44038500FD6B6A /* Like.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Like.m; sourceTree = "<group>"; };
 		AADD8B891C44045200FD6B6A /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		AADD8B8A1C44045200FD6B6A /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		AADD8B911C445ADF00FD6B6A /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = ParseStarterProject/Media.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 				81DDFD1719B4A60300BE649C /* Parse.framework */,
 				817AD67B196B009E0014C796 /* Bolts.framework */,
 				81A6CA5E1A2EA0B800297C39 /* System Frameworks */,
+				AADD8B911C445ADF00FD6B6A /* Media.xcassets */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 			files = (
 				814C3ABE1B69864600E307BB /* Default.png in Resources */,
 				814C3AC21B69864600E307BB /* ParseStarterProjectViewController.xib in Resources */,
+				AADD8B921C445ADF00FD6B6A /* Media.xcassets in Resources */,
 				814C3ABF1B69864600E307BB /* Default@2x.png in Resources */,
 				814C3ABD1B69864600E307BB /* Default-568h@2x.png in Resources */,
 				814C3AC11B69864600E307BB /* MainWindow.xib in Resources */,

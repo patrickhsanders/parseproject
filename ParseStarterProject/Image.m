@@ -10,5 +10,8 @@
 
 @implementation Image
 
+-(NSString*)description{
+  return [NSString stringWithFormat:@"%@ %@ %@ %@", _imageId, _imageOwner, _likes, _comments];
+}
 
 @end
