@@ -11,6 +11,7 @@
 
 @interface Like : NSObject
 
+@property (nonatomic, strong) NSString *likeId;
 @property (nonatomic, strong) NSString *imageId;
 @property (nonatomic, strong) NSDate *likeDate;
 @property (nonatomic, strong) User *likedByUser;

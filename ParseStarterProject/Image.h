@@ -15,7 +15,7 @@
 @property (nonatomic, strong) NSString *imageId; //
 @property (nonatomic, strong) UIImage *imageOriginal; //
 @property (nonatomic, strong) NSString *imageOwner; //
-@property (nonatomic, strong) NSDate *createdDate; // 
+@property (nonatomic, strong) NSDate *createdDate; //
 
 @property (nonatomic, strong) NSMutableArray *likes;
 @property (nonatomic) NSUInteger numberOfLikes; // calculated, not stored in parse

@@ -10,13 +10,11 @@
 
 
 @implementation ParseAccess{
-  BOOL loggedIn;
 }
 
 - (instancetype)init{
   self = [super init];
   _images = [[NSMutableArray alloc] init];
-  loggedIn = false;
   return self;
 }
 
@@ -37,25 +35,23 @@
 }
 
 - (void)getImageObject:(PFObject*) objectId{
-  
   PFQuery *query = [PFQuery queryWithClassName:@"Image"];
   [query includeKey:@"imageOwner"];
   [query getObjectInBackgroundWithId:[objectId objectId] block:^(PFObject * _Nullable object, NSError * _Nullable error) {
     
     PFFile *image = object[@"imageOriginal"];
     [image getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
-      Image *image = [[Image alloc] init];
-      image.imageId = [object objectId];
-      image.imageOwner = [object[@"imageOwner"] objectId];
-      image.imageOriginal = [UIImage imageWithData:data];
-      image.createdDate = [object createdAt];
-      [self.images addObject:image];
       
+      
+      [[NSNotificationCenter defaultCenter] postNotificationName:@"receiveImageNotification" object:self userInfo:
+       @{@"imageId" : [object objectId],
+         @"imageOwner" : [object[@"imageOwner"] objectForKey:@"username"],
+         @"imageOriginal" : [UIImage imageWithData:data],
+         @"createdDate" : [object createdAt]}];
       [self getLikeCountForImage:object];
-      [self getLikesForImage:object];
       [self getCommentCountForImage:object];
-      [self getCommentsForImage:object];
-      [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDataParse" object:self userInfo:@{@"update" : @"image"}];
+      //[self getCommentsForImage:object];
+      [self getLikesForImage:objectId];
     }];
   }];
 }
@@ -64,36 +60,16 @@
   PFQuery *query = [PFQuery queryWithClassName:@"Like"];
   [query whereKey:@"image" equalTo:image];
   [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
-    for (Image *imageFromCollection in self.images) {
-      if([imageFromCollection.imageId isEqualToString:[image objectId]]){
-        if(imageFromCollection.likes == nil){
-          imageFromCollection.likes = [[NSMutableArray alloc] init];
-        }
-        for (PFObject *object in objects) {
-          Like *like = [[Like alloc] init];
-          like.imageId = [image objectId];
-          like.likeDate = [object createdAt];
-          
-          if (self.users == nil) {
-            self.users = [[NSMutableDictionary alloc] init];
-          }
-          if ([self.users objectForKey:[[object objectForKey:@"user"] objectId]]){
-            like.likedByUser = [self.users objectForKey:[[object objectForKey:@"user"] objectId]];
-          } else {
-            PFUser *user = [object objectForKey:@"user"];
-            like.likedByUser = [[User alloc] init];
-            like.likedByUser.userId = [user objectId];
-            like.likedByUser.username = [user username];
-            like.likedByUser.realName = [user objectForKey:@"fullName"];
-            //avatar later
-          }
-          [imageFromCollection.likes addObject:like];
-          imageFromCollection.numberOfLikes = [objects count];
-        }
-      }
+    
+    for (PFObject *object in objects) {
+      Like *like = [[Like alloc] init];
+      like.likeId = [object objectId];
+      like.imageId = [image objectId];
+      like.likeDate = [object createdAt];
+      
+      [self getUserForLike:object andUser:object[@"user"]];
+      [[NSNotificationCenter defaultCenter] postNotificationName:@"receiveLike" object:self userInfo:@{@"imageId" : [image objectId], @"like" : like}];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDataParse" object:self userInfo:@{@"update" : @"likes"}];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDataParse" object:self userInfo:@{@"update" : @"numberOfLikes"}];
   }];
 }
 
@@ -101,37 +77,58 @@
   PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
   [query whereKey:@"image" equalTo:image];
   [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
-    for (Image *imageFromCollection in self.images) {
-      if([imageFromCollection.imageId isEqualToString:[image objectId]]){
-        if(imageFromCollection.comments == nil){
-          imageFromCollection.comments = [[NSMutableArray alloc] init];
-        }
-        for (PFObject *object in objects) {
-          Comment *comment = [[Comment alloc] init];
-          comment.imageId = [image objectId];
-          comment.createdDate = [object createdAt];
-          comment.commentBody = [object valueForKey:@"commentText"];
-          
-          if (self.users == nil) {
-            self.users = [[NSMutableDictionary alloc] init];
-          }
-          if ([self.users objectForKey:[[object objectForKey:@"user"] objectId]]){
-            comment.commentAuthor = [self.users objectForKey:[[object objectForKey:@"user"] objectId]];
-          } else {
-            PFUser *user = [object objectForKey:@"user"];
-            comment.commentAuthor = [[User alloc] init];
-            comment.commentAuthor.userId = [user objectId];
-            comment.commentAuthor.username = [user username];
-            comment.commentAuthor.realName = [user objectForKey:@"fullName"];
-            [self getUserAvatar:user];
-          }
-          [imageFromCollection.comments addObject:comment];
-          imageFromCollection.numberOfComments = [objects count];
-        }
-      }
+    
+    for (PFObject *object in objects) {
+      Comment *comment = [[Comment alloc] init];
+      comment.commentId = [object objectId];
+      comment.imageId = [image objectId];
+      comment.createdDate = [object createdAt];
+      comment.commentBody = [object valueForKey:@"commentText"];
+      
+      [self getUserForComment:object andUser:object[@"user"]];
+      
+      [[NSNotificationCenter defaultCenter] postNotificationName:@"receiveComment" object:self userInfo:@{@"imageId" : [image objectId], @"comment" : comment}];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDataParse" object:self userInfo:@{@"update" : @"comments"}];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDataParse" object:self userInfo:@{@"update" : @"numberOfComments"}];
+  }];
+}
+
+- (void)getUserForComment:(PFObject*)object andUser:(PFUser*)parseUser{
+  //    if([_users containsObject:object]){
+  //
+  //    }
+  User *user = [[User alloc] init];
+  user.userId = [parseUser objectId];
+  user.username = [parseUser objectForKey:@"username"];
+  user.realName = [parseUser objectForKey:@"fullName"];
+  
+  PFFile *avatar = parseUser[@"avatar"];
+  [avatar getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+    if(!error){
+      user.avatarImage = [UIImage imageWithData:data];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"receiveUser" object:self userInfo:@{@"userId" : [object objectId],
+                                                                                                     @"user" : user,
+                                                                                                     @"commentId" : [object objectId]}];
+  }];
+}
+
+- (void)getUserForLike:(PFObject*)object andUser:(PFUser*)parseUser{
+  //    if([_users containsObject:object]){
+  //
+  //    }
+  User *user = [[User alloc] init];
+  user.userId = [parseUser objectId];
+  user.username = [parseUser objectForKey:@"username"];
+  user.realName = [parseUser objectForKey:@"fullName"];
+  
+  PFFile *avatar = parseUser[@"avatar"];
+  [avatar getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+    if(!error){
+      user.avatarImage = [UIImage imageWithData:data];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"receiveUserForLike" object:self userInfo:@{@"userId" : [object objectId],
+                                                                                                            @"user" : user,
+                                                                                                            @"likeId" : [object objectId]}];
   }];
 }
 
@@ -139,12 +136,7 @@
   PFQuery *query = [PFQuery queryWithClassName:@"Like"];
   [query whereKey:@"image" equalTo:image];
   [query countObjectsInBackgroundWithBlock:^(int number, NSError * _Nullable error) {
-    for (Image *imageFromCollection in self.images) {
-      if([imageFromCollection.imageId isEqualToString:[image objectId]]){
-        imageFromCollection.numberOfLikes = number;
-      }
-    }
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDataParse" object:self userInfo:@{@"update" : @"numberOfLikes"}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"receiveNumberOfLikes" object:self userInfo: @{@"imageId" : [image objectId], @"likes" : [NSNumber numberWithInt:number]}];
   }];
 }
 
@@ -152,25 +144,10 @@
   PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
   [query whereKey:@"image" equalTo:image];
   [query countObjectsInBackgroundWithBlock:^(int number, NSError * _Nullable error) {
-    for (Image *imageFromCollection in self.images) {
-      if([imageFromCollection.imageId isEqualToString:[image objectId]]){
-        imageFromCollection.numberOfComments = number;
-      }
-    }
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDataParse" object:self userInfo:@{@"update" : @"numberOfComments"}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"receiveNumberOfComments" object:self userInfo:@{@"imageId" : [image objectId], @"comments" : [NSNumber numberWithInt:number]}];
   }];
 }
 
-- (void)getUserAvatar:(PFUser*)user{
-  PFFile *avatar = user[@"avatar"];
-  [avatar getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
-    if(!error){
-      User *userToUpdate = [self.users valueForKey:[user objectId]];
-      userToUpdate.avatarImage = [UIImage imageWithData:data];
-    }
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDataParse" object:self userInfo:@{@"update" : @"avatarImageDownloaded"}];
-  }];
-}
 
 - (NSArray *)getLocalImages{
   return _images;
@@ -185,7 +162,6 @@
   [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser *user, NSError *error) {
     if(user){
       NSLog(@"Logged in");
-      loggedIn = true;
       [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginSuccess" object:self userInfo:@{@"update" : @"loginSuccess"}];
     } else {
       NSLog(@"Login fail %@", [error localizedDescription]);

@@ -11,6 +11,7 @@
 
 @interface Comment : NSObject
 
+@property (nonatomic, strong) NSString *commentId;
 @property (nonatomic, strong) NSString *imageId;
 @property (nonatomic, strong) User *commentAuthor;
 @property (nonatomic, strong) NSString *commentBody;

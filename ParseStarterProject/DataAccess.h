@@ -12,6 +12,7 @@
 @interface DataAccess : NSObject
 
 @property (nonatomic, strong) ParseAccess *parse;
-@property (nonatomic, strong) NSArray *images;
+@property (nonatomic, strong) NSMutableArray *images;
+@property (nonatomic, strong) NSMutableDictionary *users;
 
 @end

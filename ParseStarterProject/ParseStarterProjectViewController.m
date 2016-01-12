@@ -19,32 +19,32 @@
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
-    [super viewDidLoad];
+  [super viewDidLoad];
   
   _dao = [[DataAccess alloc] init];
   
-//  ParseAccess *parse = [[ParseAccess alloc] init];
-//  [parse getImagesWithLimit:1];
+  //  ParseAccess *parse = [[ParseAccess alloc] init];
+  //  [parse getImagesWithLimit:1];
   
   
-//  NSLog(@"%lu",(unsigned long)parse.offset);
-//  [parse getImagesWithLimit:10];
-//  NSLog(@"%lu",(unsigned long)parse.offset);
+  //  NSLog(@"%lu",(unsigned long)parse.offset);
+  //  [parse getImagesWithLimit:10];
+  //  NSLog(@"%lu",(unsigned long)parse.offset);
   
   //[parse getImageObject:@"R0iuXbzJJx"];
   
 }
 
 - (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-
-    // Release any cached data, images, etc that aren't in use.
+  // Releases the view if it doesn't have a superview.
+  [super didReceiveMemoryWarning];
+  
+  // Release any cached data, images, etc that aren't in use.
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+  // Return YES for supported orientations
+  return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 @end
