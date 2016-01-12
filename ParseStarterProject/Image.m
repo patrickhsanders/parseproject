@@ -11,7 +11,7 @@
 @implementation Image
 
 -(NSString*)description{
-  return [NSString stringWithFormat:@"%@ %@ %@ %@ %@ %@", _imageId, _imageOwner, _imageOriginal, _likes, _comments, _createdDate];
+  return [NSString stringWithFormat:@"\n Image ID: %@ \n Image Owner: %@ \nActivities: %@", _imageId, _imageOwner, _activities];
 }
 
 @end

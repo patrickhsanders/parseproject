@@ -10,4 +10,9 @@
 
 @implementation User
 
+
+- (NSString *)description{
+  return [NSString stringWithFormat:@"%@", _username];
+}
+
 @end

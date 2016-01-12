@@ -23,16 +23,10 @@
   
   _dao = [[DataAccess alloc] init];
   
-  //  ParseAccess *parse = [[ParseAccess alloc] init];
-  //  [parse getImagesWithLimit:1];
-  
-  
-  //  NSLog(@"%lu",(unsigned long)parse.offset);
-  //  [parse getImagesWithLimit:10];
-  //  NSLog(@"%lu",(unsigned long)parse.offset);
-  
-  //[parse getImageObject:@"R0iuXbzJJx"];
-  
+}
+
+- (IBAction)refreshImages:(id)sender {
+  NSLog(@"%@",_dao.images);
 }
 
 - (void)didReceiveMemoryWarning {
